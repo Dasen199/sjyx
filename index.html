@@ -17,18 +17,19 @@
     width: 100%;
     height: 100%;
     border: none;
+    background-color: black; /* 设置iframe背景颜色为黑色 */
   }
   /* 添加游戏加载提示的样式 */
   #game-loading {
     position: fixed;
-    bottom: 0;
+    top: 0; /* 改为顶部显示 */
     left: 0;
     width: 100%;
     padding: 10px;
     background: rgba(0, 0, 0, 0.7);
     color: white;
     text-align: center;
-    display: none; /* 默认不显示 */
+    z-index: 1000; /* 确保提示显示在最上层 */
   }
 </style>
 <script>
@@ -57,11 +58,11 @@
         gameLoading.id = 'game-loading';
         gameLoading.innerHTML = `<img src="${randomGame.iconUrl}" alt="${randomGame.name}" style="width: 50px; height: 50px;"><br>${randomGame.name}`;
         document.body.appendChild(gameLoading);
-        gameLoading.style.display = 'block';
         
-        // 2-3秒后隐藏游戏加载提示
+        // 2-3秒后执行移除顶部的屏幕外的动画
         setTimeout(() => {
-          gameLoading.style.display = 'none';
+          gameLoading.style.transition = 'top 0.5s ease-in-out';
+          gameLoading.style.top = '-100px'; // 移动到屏幕外
         }, 2000);
       })
       .catch(error => {
