@@ -22,7 +22,7 @@
   /* 添加游戏加载提示的样式 */
   #game-loading {
     position: fixed;
-    top: 0; /* 改为顶部显示 */
+    top: -100%; /* 开始时位于屏幕外 */
     left: 0;
     width: 100%;
     padding: 10px;
@@ -30,6 +30,7 @@
     color: white;
     text-align: center;
     z-index: 1000; /* 确保提示显示在最上层 */
+    transition: top 0.5s ease-in-out; /* 添加过渡动画 */
   }
 </style>
 <script>
@@ -59,10 +60,18 @@
         gameLoading.innerHTML = `<img src="${randomGame.iconUrl}" alt="${randomGame.name}" style="width: 50px; height: 50px;"><br>${randomGame.name}`;
         document.body.appendChild(gameLoading);
         
+        // 先将提示移动到屏幕内
+        setTimeout(() => {
+          gameLoading.style.top = '0';
+        }, 100); // 稍微延迟以确保过渡效果
+        
         // 2-3秒后执行移除顶部的屏幕外的动画
         setTimeout(() => {
-          gameLoading.style.transition = 'top 0.5s ease-in-out';
-          gameLoading.style.top = '-100px'; // 移动到屏幕外
+          gameLoading.style.top = '-100%'; // 移动到屏幕外
+          // 动画完成后移除提示元素
+          setTimeout(() => {
+            gameLoading.parentNode.removeChild(gameLoading);
+          }, 500); // 等待动画完成
         }, 2000);
       })
       .catch(error => {
